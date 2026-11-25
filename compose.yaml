@@ -1,0 +1,55 @@
+# DBAdmin / MediStock - entorno de laboratorio (PostgreSQL 18)
+# Ejecutar en la carpeta donde se encuentra este archivo:
+#   docker compose up -d
+#   docker compose ps
+# IMPORTANTE: no ejecutar "docker compose down -v" salvo que se quiera
+# eliminar permanentemente las bases de datos del laboratorio.
+# Las contraseñas son de EJEMPLO y solo deben usarse en el equipo de prácticas.
+
+services:
+  nodo_norte:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: adminlab
+      POSTGRES_PASSWORD: MediStockLab2026
+      POSTGRES_DB: medistock
+    ports:
+      - "127.0.0.1:5451:5432"
+    volumes:
+      # En la imagen oficial PostgreSQL 18, montar /var/lib/postgresql.
+      - datos_norte:/var/lib/postgresql
+    networks:
+      - red_medistock
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adminlab -d medistock"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+
+  nodo_sur:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: adminlab
+      POSTGRES_PASSWORD: MediStockLab2026
+      POSTGRES_DB: medistock
+    ports:
+      - "127.0.0.1:5452:5432"
+    volumes:
+      - datos_sur:/var/lib/postgresql
+    networks:
+      - red_medistock
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adminlab -d medistock"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+
+volumes:
+  datos_norte:
+  datos_sur:
+
+networks:
+  red_medistock:
+    driver: bridge

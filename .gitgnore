@@ -1,0 +1,15 @@
+# Entorno virtual de Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Datos locales generados al ejecutar la app
+data/*.sqlite3
+data/servers.json
+*.dump
+*.sql.bak
+
+# Archivos de editor
+.vscode/
+.DS_Store
