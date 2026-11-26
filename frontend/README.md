@@ -8,17 +8,17 @@ Los módulos de JavaScript no funcionan con doble clic en el archivo, así que h
 
 ```powershell
 cd C:\dbadmin-medistock\frontend
-python -m http.server 5500
+python -m http.server 5173 --bind 127.0.0.1
 ```
 
-Luego abrir **http://localhost:5500** en el navegador.
+Luego abrir **http://localhost:5173** en el navegador. Debe ser `localhost` y no `127.0.0.1`: el backend solo acepta peticiones (CORS) del origen que dice `FRONTEND_URL` en su `.env`, que es `http://localhost:5173`.
 
 ## Modo prueba y modo real
 
 En `js/config.js`:
 
 - `MODO_PRUEBA: true` → las pantallas responden con los JSON de ejemplo del Excel. No necesita backend.
-- `MODO_PRUEBA: false` → llama al backend real en `API_BASE` (`http://127.0.0.1:8000`). El backend debe tener CORS activado para `http://localhost:5500` y `http://127.0.0.1:5500`.
+- `MODO_PRUEBA: false` → llama al backend real en `API_BASE` (`http://127.0.0.1:8000`). El backend de Pedro ya tiene CORS para `http://localhost:5173`.
 
 En modo prueba se puede simular la caída de un nodo desde la consola del navegador (F12): `simularCaida(2)`, y la recuperación con `simularCaida(2, false)`.
 

@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+psycopg[binary,pool]
+pydantic
+pydantic-settings
+cryptography
+pglast
+pytest
+httpx

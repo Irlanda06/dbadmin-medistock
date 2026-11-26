@@ -36,7 +36,8 @@ export function marcarConectado(id, conectado) {
 
 export async function recargarServidores() {
   const data = await api.get('/api/v1/servers');
-  estado.servidores = data.items || [];
+  // El backend real regresa una lista; los ejemplos del Excel, { items, total }. Aceptamos ambos.
+  estado.servidores = Array.isArray(data) ? data : (data.items || []);
   if (estado.servidorActivoId && !servidorActivo()) estado.servidorActivoId = null;
   avisarCambio();
   return estado.servidores;

@@ -10,6 +10,13 @@ import { estado, recargarServidores, elegirServidor, marcarConectado, alCambiar,
 
 const INTERVALO_MONITOREO_MS = 5000;
 
+// Estados que regresa E10 en el backend real: ONLINE, UNREACHABLE, AUTH_FAILED, ERROR
+const ETIQUETA_ESTADO = { ONLINE: 'En línea', UNREACHABLE: 'Caído', OFFLINE: 'Caído', AUTH_FAILED: 'Acceso denegado', ERROR: 'Error' };
+function chipDeEstado(st) {
+  if (!st) return chip('Sin verificar', 'neutro');
+  return chip(ETIQUETA_ESTADO[st.status] || st.status, st.status === 'ONLINE' ? 'ok' : 'error');
+}
+
 export default {
   id: 'conexiones',
   menu: 'Conexiones',
@@ -93,7 +100,9 @@ export default {
     btnProbar.addEventListener('click', () => conCarga(btnProbar, async () => {
       try {
         const datos = leerFormulario({ exigirPassword: true });
-        const r = await api.post('/api/v1/servers/test', datos);
+        // E06 solo acepta host, port, database, username y password (rechaza campos extra como name)
+        const { name, ...credenciales } = datos;
+        const r = await api.post('/api/v1/servers/test', credenciales);
         mostrarResultado(resultadoForm, {
           ok: r.reachable !== false,
           titulo: r.reachable !== false ? 'Conexión exitosa' : 'No se pudo conectar',
@@ -134,7 +143,7 @@ export default {
       const st = ultimoEstado.get(s.id);
       const piezas = [];
       if (estado.conectados.has(s.id)) piezas.push(chip('Conectado', 'info'));
-      if (st) piezas.push(chip(st.status === 'ONLINE' ? 'En línea' : 'Caído', st.status === 'ONLINE' ? 'ok' : 'error'));
+      if (st) piezas.push(chipDeEstado(st));
       if (!piezas.length) piezas.push(chip('Sin verificar', 'neutro'));
       return h('span', { class: 'grupo-chips' }, piezas);
     }
@@ -145,7 +154,7 @@ export default {
         { titulo: 'Host:puerto', valor: (s) => `${s.host}:${s.port}`, clase: 'mono' },
         { titulo: 'Base', valor: (s) => s.database },
         { titulo: 'Usuario', valor: (s) => s.username },
-        { titulo: 'Contraseña', valor: (s) => (s.passwordConfigured ? 'Guardada' : 'Sin guardar') },
+        { titulo: 'Contraseña', valor: (s) => (s.passwordConfigured === false ? 'Sin guardar' : 'Guardada') },
         { titulo: 'Estado', valor: chipEstado },
         { titulo: 'Acciones', valor: accionesFila, clase: 'acciones-fila' },
       ], estado.servidores, { vacio: 'Todavía no hay perfiles. Registra Norte y Sur con el formulario.' }));
@@ -215,7 +224,8 @@ export default {
       }
       zonaActivo.replaceChildren(h('p', { class: 'vacio' }, `Consultando ${s.name}…`));
       try {
-        const i = await api.get(`/api/v1/servers/${s.id}/info`);
+        const r = await api.get(`/api/v1/servers/${s.id}/info`);
+        const i = r.server || r; // el backend real regresa { profile, server: {...} }
         zonaActivo.replaceChildren(h('dl', { class: 'datos' },
           h('dt', {}, 'Perfil'), h('dd', {}, s.name),
           h('dt', {}, 'Versión'), h('dd', {}, i.version || '—'),
@@ -240,7 +250,12 @@ export default {
         let nuevo;
         try {
           const r = await api.get(`/api/v1/servers/${s.id}/status`);
-          nuevo = { status: r.status, checkedAt: r.checkedAt, latencyMs: r.latencyMs, motivo: r.reason || r.motivo || r.message || null };
+          nuevo = {
+            status: r.status,
+            checkedAt: r.checkedAt || new Date().toISOString(),
+            latencyMs: r.latencyMs ?? null,
+            motivo: (r.error && r.error.message) || r.reason || null,
+          };
         } catch (e) {
           nuevo = { status: 'OFFLINE', checkedAt: new Date().toISOString(), latencyMs: null, motivo: mensajeError(e) };
         }
@@ -262,7 +277,7 @@ export default {
     function pintarMonitoreo() {
       zonaMonitoreo.replaceChildren(tabla([
         { titulo: 'Servidor', valor: (s) => s.name },
-        { titulo: 'Estado', valor: (s) => { const st = ultimoEstado.get(s.id); return st ? chip(st.status === 'ONLINE' ? 'En línea' : 'Caído', st.status === 'ONLINE' ? 'ok' : 'error') : chip('Sin verificar'); } },
+        { titulo: 'Estado', valor: (s) => chipDeEstado(ultimoEstado.get(s.id)) },
         { titulo: 'Latencia', valor: (s) => { const st = ultimoEstado.get(s.id); return st && st.latencyMs != null ? `${st.latencyMs} ms` : '—'; } },
         { titulo: 'Última comprobación', valor: (s) => fechaHora(ultimoEstado.get(s.id)?.checkedAt) },
         { titulo: 'Motivo', valor: (s) => ultimoEstado.get(s.id)?.motivo || '—' },

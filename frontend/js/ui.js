@@ -72,7 +72,14 @@ export function mostrarResultado(contenedor, { ok, titulo, detalle }) {
 
 export function mensajeError(e) {
   const codigo = e && e.codigo ? ` [${e.codigo}]` : '';
-  return `${(e && e.message) || 'Error desconocido'}${codigo}`;
+  // VALIDATION_ERROR del backend trae details: [{ field: 'body.name', type: 'extra_forbidden' }, ...]
+  let campos = '';
+  if (e && Array.isArray(e.detalle) && e.detalle.length) {
+    campos = ' · ' + e.detalle
+      .map((d) => `${String(d.field || '').replace(/^body\./, '')}: ${d.type || d.message || 'inválido'}`)
+      .join(', ');
+  }
+  return `${(e && e.message) || 'Error desconocido'}${codigo}${campos}`;
 }
 
 // Avisos flotantes (toast)

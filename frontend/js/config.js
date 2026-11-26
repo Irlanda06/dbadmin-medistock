@@ -3,6 +3,6 @@
 // MODO_PRUEBA = false → las pantallas llaman al backend real en API_BASE.
 export const CONFIG = {
   API_BASE: 'http://127.0.0.1:8000',
-  MODO_PRUEBA: true,
+  MODO_PRUEBA: false, // ya existe el backend de Pedro; ponlo en true para trabajar sin backend
   RETRASO_PRUEBA_MS: 300, // simula lo que tarda una respuesta real
 };

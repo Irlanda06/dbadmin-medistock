@@ -1,0 +1,27 @@
+# Entorno virtual
+.venv/
+
+# Secretos
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Almacenamiento local
+storage/
+*.db
+*.db-wal
+*.db-shm
+
+# Pruebas
+.pytest_cache/
+.coverage
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
