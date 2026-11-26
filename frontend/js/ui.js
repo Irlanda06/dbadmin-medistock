@@ -58,7 +58,11 @@ export function formatoCelda(v) {
 
 export function fechaHora(iso) {
   if (!iso) return '—';
-  const d = new Date(iso);
+  // El backend guarda en SQLite la hora UTC sin zona ("2026-11-26 19:15:37"): se marca como UTC
+  // para que el navegador la convierta a la hora de México.
+  const texto = String(iso);
+  const sinZona = /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/.test(texto);
+  const d = new Date(sinZona ? texto.replace(' ', 'T') + 'Z' : texto);
   return isNaN(d) ? String(iso) : d.toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'medium' });
 }
 
@@ -121,4 +125,51 @@ export function campo(etiqueta, input, ayuda) {
     h('span', { class: 'campo-etiqueta' }, etiqueta),
     input,
     ayuda ? h('span', { class: 'campo-ayuda' }, ayuda) : null);
+}
+
+// ---------- Operaciones que tardan (respaldos, restauraciones) ----------
+// El backend responde "QUEUED" de inmediato y trabaja en segundo plano.
+// esperarHasta pregunta cada segundo hasta que el estado sea final (SUCCEEDED o FAILED).
+export async function esperarHasta(consultar, { intervaloMs = 1000, maxIntentos = 900, alAvanzar } = {}) {
+  for (let i = 0; i < maxIntentos; i++) {
+    const r = await consultar();
+    if (alAvanzar) alAvanzar(r);
+    if (r.status === 'SUCCEEDED' || r.status === 'FAILED') return r;
+    await new Promise((res) => setTimeout(res, intervaloMs));
+  }
+  throw new Error('La operación tardó demasiado; revisa el historial.');
+}
+
+export const ESTADO_OPERACION = {
+  QUEUED: ['En cola', 'neutro'], RUNNING: ['Ejecutando', 'aviso'],
+  SUCCEEDED: ['Exitoso', 'ok'], FAILED: ['Falló', 'error'],
+};
+export function chipOperacion(status) {
+  const [texto, tipo] = ESTADO_OPERACION[status] || [status || '—', 'neutro'];
+  return chip(texto, tipo);
+}
+
+export function formatoBytes(n) {
+  if (n === null || n === undefined) return '—';
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / 1024 / 1024).toFixed(2)} MB`;
+}
+
+// "MediStock Norte" → "medistock_norte"
+export function slug(texto) {
+  return String(texto).normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+}
+
+// 2026-11-26 13:05 → "20261126_1305"
+export function marcaTiempo(d = new Date()) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`;
+}
+
+// Lee parámetros después del ? en la dirección: #/restauraciones?backup=3 → { backup: '3' }
+export function parametrosRuta() {
+  const q = location.hash.split('?')[1] || '';
+  return Object.fromEntries(new URLSearchParams(q));
 }

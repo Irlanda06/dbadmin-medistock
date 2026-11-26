@@ -3,6 +3,8 @@
 //   2. Importarlo aquí y poner el objeto en lugar de su pendiente(...).
 import conexiones from './conexiones.js';
 import consultas from './consultas.js';
+import respaldos from './respaldos.js';
+import restauraciones from './restauraciones.js';
 import { pendiente } from './pendiente.js';
 
 export const MODULOS = [
@@ -10,10 +12,8 @@ export const MODULOS = [
     descripcion: 'Estado de los servidores, acciones rápidas y actividad reciente.' }),
   conexiones,
   consultas,
-  pendiente({ id: 'respaldos', menu: 'Respaldos', titulo: 'Respaldos configurables', responsable: 'Goreti', moduloExcel: '03',
-    descripcion: 'Genera respaldos con pg_dump eligiendo alcance, formato y archivo.' }),
-  pendiente({ id: 'restauraciones', menu: 'Restauraciones', titulo: 'Restauraciones verificadas', responsable: 'Goreti', moduloExcel: '04',
-    descripcion: 'Restaura un respaldo en una base nueva de prueba y verifica tablas y recuentos.' }),
+  respaldos,
+  restauraciones,
   pendiente({ id: 'roles', menu: 'Usuarios y roles', titulo: 'Usuarios, grupos y atributos', responsable: 'Goreti', moduloExcel: '05',
     descripcion: 'Crea usuarios y grupos, cambia contraseñas y atributos, administra membresías.' }),
   pendiente({ id: 'privilegios', menu: 'Privilegios', titulo: 'Privilegios y control de acceso', responsable: 'Goreti', moduloExcel: '06',

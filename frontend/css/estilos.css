@@ -162,3 +162,7 @@ h1 { margin: 2px 0 2px; font-size: 24px; }
 .acciones-editor { margin-top: 10px; gap: 14px; }
 .input-chico { width: 80px; font: inherit; padding: 5px 8px; border: 1px solid var(--borde); border-radius: 6px; }
 @media (max-width: 1000px) { .rejilla-explorador { grid-template-columns: 1fr; } }
+.fila-3 { grid-template-columns: 1fr 1fr 1fr; }
+.campo[hidden] { display: none; }
+a.btn { text-decoration: none; display: inline-block; }
+@media (max-width: 900px) { .fila-3 { grid-template-columns: 1fr; } }
