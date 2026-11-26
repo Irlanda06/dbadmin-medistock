@@ -37,9 +37,12 @@ export default {
       database: h('input', { type: 'text', maxlength: '63', placeholder: 'medistock', required: true }),
       username: h('input', { type: 'text', maxlength: '63', placeholder: 'adminlab', required: true }),
       password: h('input', { type: 'password', autocomplete: 'new-password' }),
+      readerUsername: h('input', { type: 'text', maxlength: '63', placeholder: 'dbadmin_reader' }),
+      readerPassword: h('input', { type: 'password', autocomplete: 'new-password' }),
     };
     const tituloForm = h('h2', { class: 'tarjeta-titulo' }, 'Registrar perfil');
     const ayudaPassword = h('span', { class: 'campo-ayuda' }, 'Se guarda en el backend; nunca se vuelve a mostrar.');
+    const ayudaLector = h('span', { class: 'campo-ayuda' }, 'Opcional al registrar; necesaria para Consultas SQL.');
     const resultadoForm = h('div');
     const btnProbar = h('button', { type: 'button', class: 'btn' }, 'Probar sin guardar');
     const btnGuardar = h('button', { type: 'submit', class: 'btn btn-primario' }, 'Guardar perfil');
@@ -50,6 +53,9 @@ export default {
       h('div', { class: 'fila-campos' }, campo('Puerto', f.port), campo('Base de datos', f.database)),
       h('div', { class: 'fila-campos' }, campo('Usuario', f.username),
         h('label', { class: 'campo' }, h('span', { class: 'campo-etiqueta' }, 'Contraseña'), f.password, ayudaPassword)),
+      h('div', { class: 'fila-campos' },
+        campo('Usuario de lectura', f.readerUsername, 'Lo usan el explorador y el editor SQL (solo lectura).'),
+        h('label', { class: 'campo' }, h('span', { class: 'campo-etiqueta' }, 'Contraseña de lectura'), f.readerPassword, ayudaLector)),
       h('div', { class: 'acciones' }, btnCancelar, btnProbar, btnGuardar),
       resultadoForm);
 
@@ -69,6 +75,15 @@ export default {
       if (!datos.username) errores.push('el usuario');
       if (f.password.value) datos.password = f.password.value;
       else if (exigirPassword) errores.push('la contraseña');
+      // Usuario de lectura: en E04, omitirlo BORRA la configuración del lector, por eso siempre se manda si existe.
+      const lector = f.readerUsername.value.trim();
+      if (lector) {
+        datos.readerUsername = lector;
+        if (f.readerPassword.value) datos.readerPassword = f.readerPassword.value;
+        else if (editandoId === null || !estado.servidores.find((x) => x.id === editandoId)?.readerConfigured) {
+          errores.push('la contraseña del usuario de lectura');
+        }
+      }
       if (errores.length) throw new Error('Falta ' + errores.join(', ') + '.');
       return datos;
     }
@@ -79,6 +94,8 @@ export default {
       tituloForm.textContent = 'Registrar perfil';
       f.password.placeholder = '';
       ayudaPassword.textContent = 'Se guarda en el backend; nunca se vuelve a mostrar.';
+      f.readerPassword.placeholder = '';
+      ayudaLector.textContent = 'Opcional al registrar; necesaria para Consultas SQL.';
       btnCancelar.hidden = true;
     }
 
@@ -88,6 +105,10 @@ export default {
       f.database.value = s.database; f.username.value = s.username; f.password.value = '';
       f.password.placeholder = s.passwordConfigured ? '•••••• (guardada)' : '';
       ayudaPassword.textContent = 'Déjala vacía para conservar la contraseña guardada.';
+      f.readerUsername.value = s.readerUsername || '';
+      f.readerPassword.value = '';
+      f.readerPassword.placeholder = s.readerConfigured ? '•••••• (guardada)' : '';
+      ayudaLector.textContent = s.readerConfigured ? 'Déjala vacía para conservarla.' : 'Escribe usuario y contraseña de lectura.';
       tituloForm.textContent = `Editar perfil: ${s.name}`;
       btnCancelar.hidden = false;
       resultadoForm.replaceChildren();
@@ -101,7 +122,7 @@ export default {
       try {
         const datos = leerFormulario({ exigirPassword: true });
         // E06 solo acepta host, port, database, username y password (rechaza campos extra como name)
-        const { name, ...credenciales } = datos;
+        const { name, readerUsername, readerPassword, ...credenciales } = datos;
         const r = await api.post('/api/v1/servers/test', credenciales);
         mostrarResultado(resultadoForm, {
           ok: r.reachable !== false,
@@ -155,6 +176,7 @@ export default {
         { titulo: 'Base', valor: (s) => s.database },
         { titulo: 'Usuario', valor: (s) => s.username },
         { titulo: 'Contraseña', valor: (s) => (s.passwordConfigured === false ? 'Sin guardar' : 'Guardada') },
+        { titulo: 'Lector', valor: (s) => (s.readerConfigured ? chip(s.readerUsername || 'Configurado', 'ok') : chip('Sin lector', 'aviso')) },
         { titulo: 'Estado', valor: chipEstado },
         { titulo: 'Acciones', valor: accionesFila, clase: 'acciones-fila' },
       ], estado.servidores, { vacio: 'Todavía no hay perfiles. Registra Norte y Sur con el formulario.' }));

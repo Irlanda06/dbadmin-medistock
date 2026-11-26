@@ -2,14 +2,14 @@
 //   1. Crear js/modulos/<nombre>.js copiando la forma de conexiones.js (id, menu, titulo, descripcion, render).
 //   2. Importarlo aquí y poner el objeto en lugar de su pendiente(...).
 import conexiones from './conexiones.js';
+import consultas from './consultas.js';
 import { pendiente } from './pendiente.js';
 
 export const MODULOS = [
   pendiente({ id: 'resumen', menu: 'Resumen', titulo: 'Panel principal', responsable: 'Ivie',
     descripcion: 'Estado de los servidores, acciones rápidas y actividad reciente.' }),
   conexiones,
-  pendiente({ id: 'consultas', menu: 'Consultas SQL', titulo: 'Consulta SQL y exploración', responsable: 'Ivie', moduloExcel: '02',
-    descripcion: 'Explora esquemas, tablas y vistas, y ejecuta consultas de solo lectura.' }),
+  consultas,
   pendiente({ id: 'respaldos', menu: 'Respaldos', titulo: 'Respaldos configurables', responsable: 'Goreti', moduloExcel: '03',
     descripcion: 'Genera respaldos con pg_dump eligiendo alcance, formato y archivo.' }),
   pendiente({ id: 'restauraciones', menu: 'Restauraciones', titulo: 'Restauraciones verificadas', responsable: 'Goreti', moduloExcel: '04',
