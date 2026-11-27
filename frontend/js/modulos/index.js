@@ -8,6 +8,7 @@ import restauraciones from './restauraciones.js';
 import roles from './roles.js';
 import privilegios from './privilegios.js';
 import distribucion from './distribucion.js';
+import sesiones from './sesiones.js';
 import mantenimiento from './mantenimiento.js';
 import historial from './historial.js';
 import { pendiente } from './pendiente.js';
@@ -22,8 +23,7 @@ export const MODULOS = [
   roles,
   privilegios,
   mantenimiento,
-  pendiente({ id: 'sesiones', menu: 'Sesiones y bloqueos', titulo: 'Sesiones y bloqueos', responsable: 'Ivie', moduloExcel: '08',
-    descripcion: 'Consulta pg_stat_activity e identifica quién bloquea a quién.' }),
+  sesiones,
   distribucion,
   historial,
 ];
