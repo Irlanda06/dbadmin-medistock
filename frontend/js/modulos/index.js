@@ -5,6 +5,8 @@ import conexiones from './conexiones.js';
 import consultas from './consultas.js';
 import respaldos from './respaldos.js';
 import restauraciones from './restauraciones.js';
+import mantenimiento from './mantenimiento.js';
+import historial from './historial.js';
 import { pendiente } from './pendiente.js';
 
 export const MODULOS = [
@@ -18,12 +20,10 @@ export const MODULOS = [
     descripcion: 'Crea usuarios y grupos, cambia contraseñas y atributos, administra membresías.' }),
   pendiente({ id: 'privilegios', menu: 'Privilegios', titulo: 'Privilegios y control de acceso', responsable: 'Goreti', moduloExcel: '06',
     descripcion: 'Concede y revoca permisos y compara los privilegios antes y después.' }),
-  pendiente({ id: 'mantenimiento', menu: 'Mantenimiento', titulo: 'Mantenimiento', responsable: 'Ivie', moduloExcel: '07',
-    descripcion: 'Ejecuta ANALYZE o VACUUM (ANALYZE) sobre una tabla y registra el resultado.' }),
+  mantenimiento,
   pendiente({ id: 'sesiones', menu: 'Sesiones y bloqueos', titulo: 'Sesiones y bloqueos', responsable: 'Ivie', moduloExcel: '08',
     descripcion: 'Consulta pg_stat_activity e identifica quién bloquea a quién.' }),
   pendiente({ id: 'distribucion', menu: 'Distribución', titulo: 'Configuración y consultas distribuidas', responsable: 'Ivie', moduloExcel: '09',
     descripcion: 'Configura postgres_fdw entre Norte y Sur y consulta el inventario global.' }),
-  pendiente({ id: 'historial', menu: 'Historial', titulo: 'Historial y seguimiento', responsable: 'Ivie', moduloExcel: '10',
-    descripcion: 'Consulta y filtra el historial persistente de operaciones.' }),
+  historial,
 ];
