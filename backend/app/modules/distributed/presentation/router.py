@@ -1,0 +1,27 @@
+from fastapi import APIRouter,Depends
+from app.core.responses import success
+from app.modules._shared.common import features,ServerId,Limit,Offset,Confirmed
+from .schemas import ForeignServerRequest,MappingRequest,ForeignTableRequest,TestRequest,ViewRequest
+router=APIRouter(prefix='/servers/{server_id}/databases/{database}/fdw',tags=['Distributed'])
+@router.post('/extension')
+def extension(server_id:ServerId,database:str,body:Confirmed,f=Depends(features)):return success(f.distributed.extension(server_id,database))
+@router.get('/servers')
+def servers(server_id:ServerId,database:str,f=Depends(features)):return success(f.distributed.servers(server_id,database))
+@router.post('/servers',status_code=201)
+def create_server(server_id:ServerId,database:str,body:ForeignServerRequest,f=Depends(features)):return success(f.distributed.create_server(server_id,database,body))
+@router.get('/user-mappings')
+def mappings(server_id:ServerId,database:str,f=Depends(features)):return success(f.distributed.mappings(server_id,database))
+@router.post('/user-mappings',status_code=201)
+def mapping(server_id:ServerId,database:str,body:MappingRequest,f=Depends(features)):return success(f.distributed.mapping(server_id,database,body))
+@router.get('/foreign-tables')
+def foreign_tables(server_id:ServerId,database:str,f=Depends(features)):return success(f.distributed.foreign_tables(server_id,database))
+@router.post('/foreign-tables',status_code=201)
+def foreign_table(server_id:ServerId,database:str,body:ForeignTableRequest,f=Depends(features)):return success(f.distributed.foreign_table(server_id,database,body))
+@router.post('/test')
+def test(server_id:ServerId,database:str,body:TestRequest,f=Depends(features)):return success(f.distributed.test(server_id,database,body))
+@router.post('/views',status_code=201)
+def view(server_id:ServerId,database:str,body:ViewRequest,f=Depends(features)):return success(f.distributed.view(server_id,database,body))
+@router.get('/inventory')
+def inventory(server_id:ServerId,database:str,schema:str='medistock',view:str='inventario_global',limit:Limit=100,offset:Offset=0,f=Depends(features)):return success(f.distributed.inventory(server_id,database,schema,view,limit,offset,False))
+@router.get('/inventory/details')
+def inventory_details(server_id:ServerId,database:str,schema:str='medistock',view:str='inventario_global',limit:Limit=100,offset:Offset=0,f=Depends(features)):return success(f.distributed.inventory(server_id,database,schema,view,limit,offset,True))

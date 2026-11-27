@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DBAdmin · Panel de administración de PostgreSQL</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <aside class="lateral">
+    <div class="marca">
+      <div class="marca-nombre">DBAdmin</div>
+      <div class="marca-sub">Panel de administración<br>PostgreSQL 18</div>
+    </div>
+    <div class="menu-grupo">Operaciones</div>
+    <nav id="menu"></nav>
+    <div class="lateral-pie">
+      <div><span class="punto-verde"></span> Laboratorio MediStock</div>
+      <div>Norte 5451 · Sur 5452 · Docker</div>
+    </div>
+  </aside>
+
+  <main class="principal">
+    <header class="encabezado">
+      <div>
+        <div class="migas">DBAdmin / Administración</div>
+        <h1 id="titulo">DBAdmin</h1>
+        <p id="descripcion" class="descripcion"></p>
+      </div>
+      <div class="encabezado-der">
+        <span id="modo" class="modo"></span>
+        <select id="selector-servidor" class="selector" aria-label="Servidor activo"></select>
+      </div>
+    </header>
+    <div id="contenido" class="contenido"></div>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
