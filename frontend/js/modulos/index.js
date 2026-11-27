@@ -7,6 +7,8 @@ import respaldos from './respaldos.js';
 import restauraciones from './restauraciones.js';
 import mantenimiento from './mantenimiento.js';
 import historial from './historial.js';
+import roles from './roles.js';
+import privilegios from './privilegios.js';
 import { pendiente } from './pendiente.js';
 
 export const MODULOS = [
@@ -16,10 +18,8 @@ export const MODULOS = [
   consultas,
   respaldos,
   restauraciones,
-  pendiente({ id: 'roles', menu: 'Usuarios y roles', titulo: 'Usuarios, grupos y atributos', responsable: 'Goreti', moduloExcel: '05',
-    descripcion: 'Crea usuarios y grupos, cambia contraseñas y atributos, administra membresías.' }),
-  pendiente({ id: 'privilegios', menu: 'Privilegios', titulo: 'Privilegios y control de acceso', responsable: 'Goreti', moduloExcel: '06',
-    descripcion: 'Concede y revoca permisos y compara los privilegios antes y después.' }),
+  roles,
+  privilegios,
   mantenimiento,
   pendiente({ id: 'sesiones', menu: 'Sesiones y bloqueos', titulo: 'Sesiones y bloqueos', responsable: 'Ivie', moduloExcel: '08',
     descripcion: 'Consulta pg_stat_activity e identifica quién bloquea a quién.' }),
