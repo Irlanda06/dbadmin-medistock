@@ -166,3 +166,7 @@ h1 { margin: 2px 0 2px; font-size: 24px; }
 .campo[hidden] { display: none; }
 a.btn { text-decoration: none; display: inline-block; }
 @media (max-width: 900px) { .fila-3 { grid-template-columns: 1fr; } }
+/* ---------- Módulo 5: roles ---------- */
+.lista-casillas { display: grid; gap: 6px; margin: 4px 0; }
+.casilla-atributo { align-items: baseline; }
+.acciones-izq input[type="password"], .acciones-izq select { font: inherit; padding: 6px 9px; border: 1px solid var(--borde); border-radius: var(--radio); min-width: 220px; }

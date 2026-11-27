@@ -5,6 +5,7 @@ import conexiones from './conexiones.js';
 import consultas from './consultas.js';
 import respaldos from './respaldos.js';
 import restauraciones from './restauraciones.js';
+import roles from './roles.js';
 import mantenimiento from './mantenimiento.js';
 import historial from './historial.js';
 import { pendiente } from './pendiente.js';
@@ -16,8 +17,7 @@ export const MODULOS = [
   consultas,
   respaldos,
   restauraciones,
-  pendiente({ id: 'roles', menu: 'Usuarios y roles', titulo: 'Usuarios, grupos y atributos', responsable: 'Goreti', moduloExcel: '05',
-    descripcion: 'Crea usuarios y grupos, cambia contraseñas y atributos, administra membresías.' }),
+  roles,
   pendiente({ id: 'privilegios', menu: 'Privilegios', titulo: 'Privilegios y control de acceso', responsable: 'Goreti', moduloExcel: '06',
     descripcion: 'Concede y revoca permisos y compara los privilegios antes y después.' }),
   mantenimiento,
