@@ -1,6 +1,8 @@
-// Registro de pantallas. Para agregar un módulo nuevo:
-//   1. Crear js/modulos/<nombre>.js copiando la forma de conexiones.js (id, menu, titulo, descripcion, render).
-//   2. Importarlo aquí y poner el objeto en lugar de su pendiente(...).
+// Registro de pantallas: el orden de esta lista es el orden del menú lateral.
+// Para agregar un módulo nuevo: crear js/modulos/<nombre>.js con la forma
+// { id, menu, titulo, descripcion, render(contenedor) }, importarlo aquí y ponerlo en la lista.
+// (pendiente.js sigue disponible para pantallas "en construcción", aunque ya no se usa.)
+import resumen from './resumen.js';
 import conexiones from './conexiones.js';
 import consultas from './consultas.js';
 import respaldos from './respaldos.js';
@@ -11,11 +13,9 @@ import distribucion from './distribucion.js';
 import sesiones from './sesiones.js';
 import mantenimiento from './mantenimiento.js';
 import historial from './historial.js';
-import { pendiente } from './pendiente.js';
 
 export const MODULOS = [
-  pendiente({ id: 'resumen', menu: 'Resumen', titulo: 'Panel principal', responsable: 'Ivie',
-    descripcion: 'Estado de los servidores, acciones rápidas y actividad reciente.' }),
+  resumen,
   conexiones,
   consultas,
   respaldos,

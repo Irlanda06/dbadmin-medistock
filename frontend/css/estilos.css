@@ -193,3 +193,19 @@ a.btn { text-decoration: none; display: inline-block; }
 .bloque-sql { background: #f7f9fa; border: 1px solid var(--borde); border-radius: 6px; padding: 8px 10px; margin: 6px 0; white-space: pre-wrap; }
 .guia-pasos { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 13px; }
 @media (max-width: 900px) { .cadena-bloqueo { grid-template-columns: 1fr; } }
+/* ---------- Resumen ---------- */
+.rejilla-nodos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.nodo-resumen { border: 1px solid var(--borde); border-left-width: 4px; border-radius: var(--radio); padding: 12px 14px; display: grid; gap: 4px; }
+.nodo-ok { border-left-color: var(--ok); }
+.nodo-caido { border-left-color: var(--error); }
+.nodo-resumen-titulo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rejilla-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.cifra { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: 14px 16px; display: grid; gap: 2px; text-decoration: none; color: var(--texto); }
+.cifra:hover { border-color: #c3ccd1; }
+.cifra-valor { font-size: 26px; font-weight: 700; color: var(--primario); }
+.cifra-etiqueta { font-size: 12.5px; color: var(--texto-suave); }
+.cifra-alerta .cifra-valor { color: var(--error); }
+.rejilla-accesos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.acceso { border: 1px solid var(--borde); border-radius: var(--radio); padding: 10px 12px; display: grid; gap: 2px; text-decoration: none; color: var(--texto); }
+.acceso:hover { border-color: var(--primario); background: var(--primario-claro); }
+.acceso-pruebas { font-size: 11.5px; font-weight: 600; color: var(--primario); }
