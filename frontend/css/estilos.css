@@ -170,3 +170,16 @@ a.btn { text-decoration: none; display: inline-block; }
 .lista-casillas { display: grid; gap: 6px; margin: 4px 0; }
 .casilla-atributo { align-items: baseline; }
 .acciones-izq input[type="password"], .acciones-izq select { font: inherit; padding: 6px 9px; border: 1px solid var(--borde); border-radius: var(--radio); min-width: 220px; }
+/* ---------- Módulo 9: distribución ---------- */
+.mapa-fdw { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; }
+.nodo-fdw { border: 1px solid var(--borde); border-radius: var(--radio); padding: 12px 14px; display: grid; gap: 4px; font-size: 13px; }
+.nodo-fdw span { color: var(--texto-suave); font-size: 12px; }
+.nodo-local { border-color: var(--primario); background: var(--primario-claro); }
+.flecha-fdw { text-align: center; color: var(--texto-suave); font-family: var(--mono); font-size: 12.5px; }
+.paso-fdw { border-top: 1px solid var(--borde); padding: 12px 0; }
+.paso-fdw:first-of-type { border-top: none; padding-top: 0; }
+.paso-fdw-titulo { display: flex; align-items: center; gap: 10px; }
+.paso-num { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--primario); color: #fff; font-size: 12px; font-weight: 700; }
+.paso-fdw .campo-ayuda { margin: 4px 0 8px 34px; display: block; }
+.paso-fdw .fila-campos, .paso-fdw .acciones, .paso-fdw .resultado { margin-left: 34px; }
+@media (max-width: 900px) { .mapa-fdw { grid-template-columns: 1fr; } }

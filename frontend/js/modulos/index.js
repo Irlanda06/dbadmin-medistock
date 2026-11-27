@@ -7,6 +7,7 @@ import respaldos from './respaldos.js';
 import restauraciones from './restauraciones.js';
 import roles from './roles.js';
 import privilegios from './privilegios.js';
+import distribucion from './distribucion.js';
 import mantenimiento from './mantenimiento.js';
 import historial from './historial.js';
 import { pendiente } from './pendiente.js';
@@ -23,7 +24,6 @@ export const MODULOS = [
   mantenimiento,
   pendiente({ id: 'sesiones', menu: 'Sesiones y bloqueos', titulo: 'Sesiones y bloqueos', responsable: 'Ivie', moduloExcel: '08',
     descripcion: 'Consulta pg_stat_activity e identifica quién bloquea a quién.' }),
-  pendiente({ id: 'distribucion', menu: 'Distribución', titulo: 'Configuración y consultas distribuidas', responsable: 'Ivie', moduloExcel: '09',
-    descripcion: 'Configura postgres_fdw entre Norte y Sur y consulta el inventario global.' }),
+  distribucion,
   historial,
 ];
