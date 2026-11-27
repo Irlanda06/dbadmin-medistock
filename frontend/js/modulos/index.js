@@ -13,12 +13,6 @@ import distribucion from './distribucion.js';
 import sesiones from './sesiones.js';
 import mantenimiento from './mantenimiento.js';
 import historial from './historial.js';
-<<<<<<< HEAD
-import roles from './roles.js';
-import privilegios from './privilegios.js';
-import { pendiente } from './pendiente.js';
-=======
->>>>>>> 861cbf2614548a5c533aecc3fe1e08ad4bd064d0
 
 export const MODULOS = [
   resumen,
